@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Script from "next/script";
 import MetaPixelEvents from "@/app/MetaPixelEvents";
 import { META_PIXEL_ID } from "@/lib/metaPixel";
@@ -12,8 +11,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <Script id="meta-pixel" strategy="afterInteractive">
+      <head>
+        <Script id="meta-pixel" strategy="beforeInteractive">
           {`
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -27,14 +26,15 @@ export default function RootLayout({ children }) {
             fbq('track', 'PageView');
           `}
         </Script>
+      </head>
+      <body>
         <noscript>
-          <Image
+          <img
             alt=""
-            height={1}
-            width={1}
+            height="1"
+            width="1"
             style={{ display: "none" }}
             src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
-            unoptimized
           />
         </noscript>
         <MetaPixelEvents />
