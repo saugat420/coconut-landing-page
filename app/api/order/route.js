@@ -26,9 +26,29 @@ export async function POST(request) {
       dateTime: new Date().toISOString(),
     };
 
+    let emailWarning = null;
+
     if (isLiveOrderMode()) {
-      await appendOrderToSheet(order);
-      await sendOrderEmails(order);
+      try {
+        await appendOrderToSheet(order);
+      } catch (error) {
+        console.error("Google Sheets order save failed", error);
+        return NextResponse.json(
+          {
+            message:
+              "Order could not be saved to Google Sheets. Please check the spreadsheet ID, service account access, and Google private key.",
+          },
+          { status: 500 },
+        );
+      }
+
+      try {
+        await sendOrderEmails(order);
+      } catch (error) {
+        console.error("Order email notification failed", error);
+        emailWarning =
+          "Order was saved, but email notification failed. Please check Gmail app password settings.";
+      }
     } else {
       await saveDemoOrder(order);
     }
@@ -36,6 +56,7 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       mode: isLiveOrderMode() ? "live" : "demo",
+      warning: emailWarning,
       order,
     });
   } catch (error) {
