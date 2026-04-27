@@ -68,6 +68,14 @@ The Order Status column includes:
 
 `New Order, Order Confirmed, Order Ongoing, Delivered, Cancelled`
 
+To format the existing spreadsheet and add a dashboard tab, run:
+
+```bash
+npm run design:google-sheet
+```
+
+This styles the `Orders` tab, adds status dropdown formatting, and creates a `Dashboard` tab with today, weekly, monthly, all-time, status, recent-order, and last-seven-days metrics.
+
 ## Email Setup
 
 The easiest setup for your current Gmail is:

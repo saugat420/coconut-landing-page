@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "setup:google-sheet": "node scripts/setup-google-sheet.mjs"
+    "setup:google-sheet": "node scripts/setup-google-sheet.mjs",
+    "design:google-sheet": "node scripts/design-google-sheet.mjs"
   },
   "dependencies": {
     "googleapis": "^171.4.0",
