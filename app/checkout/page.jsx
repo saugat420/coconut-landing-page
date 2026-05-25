@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useMemo, useState } from "react";
 import { ArrowLeft, Loader2, PackageCheck } from "lucide-react";
 import { formatPrice, product } from "@/lib/product";
+import { trackMetaEvent } from "@/lib/metaPixel";
 
 function Field({ label, error, children }) {
   return (
@@ -66,6 +67,15 @@ function CheckoutContent() {
       setSubmitError(result.message || "Could not place your order. Please try again.");
       return;
     }
+
+    trackMetaEvent("Purchase", {
+      content_name: result.order.productName,
+      content_type: "product",
+      contents: [{ id: result.order.productName, quantity: result.order.quantity }],
+      currency: "NPR",
+      order_id: result.order.orderId,
+      value: result.order.totalPrice,
+    });
 
     const thankYouParams = new URLSearchParams({
       orderId: result.order.orderId,

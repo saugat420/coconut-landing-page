@@ -13,6 +13,7 @@ import {
   Truck,
 } from "lucide-react";
 import { formatPrice, product } from "@/lib/product";
+import { trackMetaEvent } from "@/lib/metaPixel";
 
 function Logo() {
   return (
@@ -39,6 +40,14 @@ export default function HomePage() {
   );
 
   function goToCheckout() {
+    trackMetaEvent("AddToCart", {
+      content_name: product.name,
+      content_type: "product",
+      contents: [{ id: product.name, quantity }],
+      currency: "NPR",
+      value: total,
+    });
+
     const params = new URLSearchParams({
       product: product.name,
       quantity: String(quantity),
